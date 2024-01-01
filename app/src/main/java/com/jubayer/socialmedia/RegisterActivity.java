@@ -107,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (pass.length() <= 12) {
+        if (pass.length() <= 6) {
             password.setError("Min password length should be 6 character");
             password.requestFocus();
             return;
