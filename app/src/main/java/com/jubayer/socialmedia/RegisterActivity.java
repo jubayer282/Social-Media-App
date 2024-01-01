@@ -1,7 +1,6 @@
 package com.jubayer.socialmedia;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -14,13 +13,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -121,7 +120,19 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            UserModel user = new UserModel(name, userName, Email, phoneNumber, pass);
+                            String image = null;
+                            UserModel user = new UserModel(mAuth.getUid(), name, userName, Email, phoneNumber, pass, image);
+                            String email = user.getEmail();
+
+                            HashMap<String, String> hashMap;
+                            hashMap = new HashMap<>();
+                            hashMap.put("name", name);
+                            hashMap.put("pass", pass);
+                            hashMap.put("phoneNumber", phoneNumber);
+                            hashMap.put("uid", user.uid);
+                            hashMap.put("Email", Email);
+                            hashMap.put("userName", userName);
+                            hashMap.put("image", "");
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -129,9 +140,9 @@ public class RegisterActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                dialog = new ProgressDialog(RegisterActivity.this);
-                                                dialog.setCancelable(false);
-                                                dialog.setMessage("Loading....");
+                                                dialog.dismiss();
+
+
                                                 Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                                                 startActivity(new Intent(RegisterActivity.this, ProfileActivity.class));
                                                 finish();
@@ -233,18 +244,27 @@ public class RegisterActivity extends AppCompatActivity {
 
     // save data in firebase database
     public void registerUser(View view){
+
+        String userId = mAuth.getCurrentUser().getUid();
+
         /* DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("UserData");*/
 
         if (!validateName() | !validateUserName() | !validateEmail() | !validatePhoneNo() | !validatePassword()){
+
             return;
         }
 
+
+        String uid = null;
+        uid = uid.toString();
         String name = regName.getText().toString();
         String userName = username.getText().toString();
         String userEmail = email.getText().toString();
         String phoneNumber = phoneNo.getText().toString();
         String Password = password.getText().toString();
-        UserModel userModel = new UserModel(name, userName, userEmail, phoneNumber, Password);
+        String image = null;
+        image = image.toString();
+        UserModel userModel = new UserModel(uid, name, userName, userEmail, phoneNumber, Password, image);
         reference.child(userName).setValue(userModel);
     }
 }

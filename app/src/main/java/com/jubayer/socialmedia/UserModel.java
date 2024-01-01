@@ -1,17 +1,27 @@
 package com.jubayer.socialmedia;
 
 public class UserModel {
-    String name, userName, userEmail, phoneNumber, Password;
+    String uid, name, userName, Email, phoneNumber, Password, image;
 
     public UserModel() {
     }
 
-    public UserModel(String name, String userName, String userEmail, String phoneNumber, String password) {
+    public UserModel(String uid,String name, String userName, String userEmail, String phoneNumber, String password, String image) {
+        this.uid = uid;
         this.name = name;
         this.userName = userName;
-        this.userEmail = userEmail;
+        this.Email = userEmail;
         this.phoneNumber = phoneNumber;
-        Password = password;
+        this.Password = password;
+        this.image = image;
+    }
+
+    public String getuid() {
+        return uid;
+    }
+
+    public void setuid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -30,12 +40,12 @@ public class UserModel {
         this.userName = userName;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return Email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserEmail(String Email) {
+        this.Email = Email;
     }
 
     public String getPhoneNumber() {
@@ -52,5 +62,13 @@ public class UserModel {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public String getimage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        Password = image;
     }
 }
